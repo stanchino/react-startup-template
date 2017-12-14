@@ -1,8 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Router } from 'react-router';
+import createBrowserHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import routes from './routes';
+import App from "./App";
+
+import './index.css';
+
+const browserHistory = createBrowserHistory();
+
+ReactDOM.render(
+    <Router history={browserHistory}>
+        <App>
+            {routes}
+        </App>
+    </Router>,
+    document.getElementById('root')
+);
 registerServiceWorker();
