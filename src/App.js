@@ -1,25 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { ConnectedRouter } from 'react-router-redux';
+import { bindActionCreators } from 'redux';
 import { NavLink } from 'react-router-dom';
 
 import { logout } from "./auth/actions";
 
-import Routes from './routes';
+import components from './routes';
 import './App.css';
 
 const App = ({ history, isLoggedIn, actions }) => (
     <ConnectedRouter history={history}>
         <div>
-            <nav key={'navigation'}>
-                <NavLink to={'/'}>Home</NavLink>
-                <NavLink to={'/public'}>Public</NavLink>
-                {isLoggedIn && <NavLink to={'/private'}>Private</NavLink>}
-                {isLoggedIn && <button onClick={actions.logout}>Logout</button>}
-                {isLoggedIn === false && <NavLink to={'/login'}>Login</NavLink>}
+            <nav>
+                <NavLink to='/'>Home</NavLink>
+                <NavLink to='/public'>Public</NavLink>
+                {isLoggedIn && <NavLink to='/private'>Private</NavLink>}
+                {isLoggedIn && <NavLink to='/' onClick={actions.logout}>Logout</NavLink>}
+                {isLoggedIn === false && <NavLink to='/login'>Login</NavLink>}
             </nav>
-            <Routes isLoggedIn={isLoggedIn}/>
+            {components}
         </div>
     </ConnectedRouter>
 );

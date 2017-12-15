@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginForm from './Login';
+import ProtectedComponent from './ProtectedComponent';
 
 export const Home = () => (
     <div>Home</div>
@@ -10,7 +11,9 @@ export const Public = () => (
 );
 
 export const Private = () => (
-    <div>Private</div>
+    <ProtectedComponent>
+        <div>Private</div>
+    </ProtectedComponent>
 );
 
 export const NotFound = () => (
@@ -20,6 +23,9 @@ export const NotFound = () => (
     </div>
 );
 
-export { LoginForm as Login };
+export {
+    LoginForm as Login,
+    ProtectedComponent
+};
 
 

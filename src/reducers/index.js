@@ -1,7 +1,14 @@
-import { combineReducers } from 'redux';
+import { persistCombineReducers } from 'redux-persist'
 import { reducer as form  } from 'redux-form';
+import storage from 'redux-persist/es/storage';
+
 import auth from '../auth/reducers';
 
-const rootReducer = combineReducers({ auth, form });
+const config = {
+    key: 'root',
+    storage,
+};
+
+const rootReducer = persistCombineReducers(config, { auth, form });
 
 export default rootReducer;
