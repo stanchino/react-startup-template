@@ -1,56 +1,24 @@
-import { push } from 'react-router-redux';
-import { call, put, take } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
+import { SubmissionError } from 'redux-form';
+import { loginRequest } from '../service';
+import { login } from '../actions';
 
-import * as types from '../reducers/types';
+export function* loginWatcherSaga() {
+    yield takeEvery(login.REQUEST, handleLoginSaga);
+}
 
-import {
-    loginSuccess,
-    loginFailure
-} from '../reducers';
-
-function* loginRequestSaga() {
-    const showLock = () => ({ 'profile': { 'username': 'test' } });
+function* handleLoginSaga(action) {
+    const { username, password } = action.payload;
 
     try {
-        const { profile } = yield call(showLock);
-
-        yield put(loginSuccess(profile));
-        yield put(push('/private'));
+        let profile = yield call(loginRequest, { username, password });
+        yield put(login.success(profile));
     } catch (error) {
-        yield put(loginFailure(error));
-        yield put(push('/'));
-    }
-}
+        const formError = new SubmissionError({
+            username: 'User with this login is not found', // specific field error
+            _error: 'Login failed, please check your credentials and try again', // global form error
+        });
 
-export function* watchLoginRequest() {
-    while (true) {
-        yield take(types.LOGIN_REQUEST);
-        yield call(loginRequestSaga);
-    }
-}
-
-export function* watchLoginSuccess() {
-    while (true) {
-        const { profile } = yield take(types.LOGIN_SUCCESS);
-
-        localStorage.setItem('AUTH', JSON.stringify({ profile }));
-    }
-}
-
-export function* watchLoginFailure() {
-    while (true) {
-        yield take(types.LOGIN_ERROR);
-
-        localStorage.removeItem('AUTH');
-    }
-}
-
-export function* watchLogout() {
-    while (true) {
-        yield take(types.LOGOUT_SUCCESS);
-
-        localStorage.removeItem('AUTH');
-
-        yield put(push('/'));
+        yield put(login.failure(formError));
     }
 }

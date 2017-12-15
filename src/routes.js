@@ -1,12 +1,16 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Switch, Route, Redirect } from 'react-router';
 
-import { Home, Private, Public } from './components/index';
+import { Home, Private, Public, Login, NotFound } from './components/index';
 
-export default (
+const Routes = ({ isLoggedIn }) => (
     <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/public" component={Public} />
-        <Route path="/private" component={Private} />
+        <Route exact path={'/'} component={Home} />
+        <Route path={'/public'} component={Public} />
+        <Route path={'/private'} component={Private} />
+        <Route path={'/login'} render={() => isLoggedIn ? <Redirect to={'/'} /> : <Login/> } />
+        <Route path={'*'} component={NotFound} />
     </Switch>
 );
+
+export default Routes;

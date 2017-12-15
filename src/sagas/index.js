@@ -1,12 +1,11 @@
 import { fork } from 'redux-saga/effects';
+import { formActionSaga } from 'redux-form-saga';
 
-import { watchLoginFailure, watchLoginRequest, watchLoginSuccess, watchLogout } from '../auth/sagas';
+import { loginWatcherSaga } from '../auth/sagas';
 
 export default function* rootSaga() {
     yield [
-        fork(watchLoginRequest),
-        fork(watchLoginSuccess),
-        fork(watchLoginFailure),
-        fork(watchLogout),
+        fork(loginWatcherSaga),
+        fork(formActionSaga)
     ];
 }
