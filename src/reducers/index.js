@@ -1,14 +1,14 @@
-import { persistCombineReducers } from 'redux-persist'
+import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist'
 import { reducer as form  } from 'redux-form';
-import storage from 'redux-persist/es/storage';
+import { routerReducer } from 'react-router-redux';
+import session from 'redux-persist/lib/storage/session';
 
 import auth from '../auth/reducers';
 
 const config = {
-    key: 'root',
-    storage,
+    key: 'auth',
+    storage: session,
 };
 
-const rootReducer = persistCombineReducers(config, { auth, form });
-
-export default rootReducer;
+export default combineReducers({ auth: persistReducer(config, auth), form, routerReducer });

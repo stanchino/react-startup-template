@@ -2,7 +2,7 @@ import initialState from './initialState';
 import { login } from '../actions';
 import * as types from '../actions/types';
 
-export default function (state = initialState, action) {
+export default (state = initialState, action) => {
     switch (action.type) {
         case login.SUCCESS:
             return { ...state, isLoggedIn: true, profile: action.payload };
@@ -13,4 +13,4 @@ export default function (state = initialState, action) {
         default:
             return state;
     }
-}
+};

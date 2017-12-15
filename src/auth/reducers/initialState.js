@@ -1,5 +1,4 @@
 export default {
     isLoggedIn: false,
-    profile: null,
-    error: null
+    profile: null
 };
