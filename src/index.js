@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import { ConnectedRouter } from 'react-router-redux';
 
 import createHistory from 'history/createBrowserHistory';
 import configureStore from './stores';
@@ -20,9 +19,7 @@ const { persistor, store } = configureStore(history);
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate persistor={persistor}>
-            <ConnectedRouter history={history}>
-                <App />
-            </ConnectedRouter>
+            <App history={history}/>
         </PersistGate>
     </Provider>,
     document.getElementById('root')
