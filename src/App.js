@@ -1,32 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import Protected, { Logout } from './auth/components';
 import { NavLink } from 'react-router-dom';
-import { withRouter } from 'react-router';
+import { Switch, Route, Redirect, withRouter } from 'react-router';
 
-import { logout } from "./auth/actions";
-import routes from './routes';
+import { Home, Private, Public, NotFound } from './components';
 
 import './App.css';
 
-const App = ({ isLoggedIn, actions }) => [
-    <nav key='menu'>
-        <NavLink to='/'>Home</NavLink>
-        <NavLink to='/public'>Public</NavLink>
-        {isLoggedIn && <NavLink to='/private'>Private</NavLink>}
-        {isLoggedIn && <NavLink to='/' onClick={actions.logout}>Logout</NavLink>}
-        {isLoggedIn === false && <NavLink to='/login'>Login</NavLink>}
-    </nav>,
-    routes
-];
+const App = () => (
+    <div className='container'>
+        <nav>
+            <NavLink to='/' exact>Home</NavLink>
+            <NavLink to='/public' exact>Public</NavLink>
+            <NavLink to='/private' exact>Private</NavLink>
+            <Protected component={null}><Logout className={'btn'}/></Protected>
+            <Protected component={<NavLink to='/login' exact>Login</NavLink>}/>
+        </nav>
+        <Switch>
+            <Route exact path={'/'} component={Home} />
+            <Route path={'/public'} component={Public} />
+            <Route path={'/private'} component={Private} />
+            <Route path={'/login'}>
+                <Protected>
+                    <Redirect to={'/'}/>
+                </Protected>
+            </Route>
+            <Route component={NotFound} />
+        </Switch>
+    </div>
+);
 
-const mapStateToProps = state => ({
-    isLoggedIn: state.auth.isLoggedIn,
-    profile: state.auth.profile
-});
-
-const mapDispatchToProps = (dispatch) => ({
-    actions: bindActionCreators({ logout }, dispatch),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(App);

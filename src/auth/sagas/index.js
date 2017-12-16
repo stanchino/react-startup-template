@@ -1,9 +1,10 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, fork } from 'redux-saga/effects';
 import { SubmissionError } from 'redux-form';
+import { formActionSaga } from 'redux-form-saga';
 import { loginRequest } from '../service';
 import { login } from '../actions';
 
-export function* loginWatcherSaga() {
+function* loginWatcherSaga() {
     yield takeEvery(login.REQUEST, handleLoginSaga);
 }
 
@@ -22,3 +23,7 @@ function* handleLoginSaga(action) {
         yield put(login.failure(formError));
     }
 }
+
+export default function* () {
+    yield [fork(loginWatcherSaga), fork(formActionSaga)];
+};

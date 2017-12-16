@@ -1,11 +1,9 @@
-import { fork } from 'redux-saga/effects';
-import { formActionSaga } from 'redux-form-saga';
-
-import { loginWatcherSaga } from '../auth/sagas';
+import { call } from 'redux-saga/effects';
+import authSagas from '../auth/sagas';
 
 export default function* rootSaga() {
+    yield call(authSagas);
     yield [
-        fork(loginWatcherSaga),
-        fork(formActionSaga)
+        // project sagas go here,
     ];
 }

@@ -1,16 +1,16 @@
-import initialState from './initialState';
-import { login } from '../actions';
-import * as types from '../actions/types';
+import { persistReducer } from 'redux-persist'
+import { reducer as formReducer  } from 'redux-form';
+import { authReducer } from './auth';
+import CookieStorage from 'redux-persist-cookie-storage'
 
-export default (state = initialState, action) => {
-    switch (action.type) {
-        case login.SUCCESS:
-            return { ...state, isLoggedIn: true, profile: action.payload };
-        case login.FAILURE:
-            return { ...state, isLoggedIn: false, profile: null };
-        case types.LOGOUT:
-            return initialState;
-        default:
-            return state;
-    }
+const config = {
+    key: 'auth',
+    storage: new CookieStorage({
+        expiration: {
+            'default': 30 * 86400,
+            'persist:auth': 10 * 86400
+        }
+    }),
 };
+
+export default { auth: persistReducer(config, authReducer), form: formReducer };
