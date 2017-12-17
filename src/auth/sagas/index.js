@@ -8,7 +8,7 @@ function* loginWatcherSaga() {
     yield takeEvery(login.REQUEST, handleLoginSaga);
 }
 
-function* handleLoginSaga(action) {
+export function* handleLoginSaga(action) {
     const { username, password } = action.payload;
 
     try {

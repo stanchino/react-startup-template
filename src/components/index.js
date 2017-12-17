@@ -9,9 +9,13 @@ export const Public = () => (
     <div>Public</div>
 );
 
+export const PrivateComponent = () => (
+    <div>Private</div>
+);
+
 export const Private = () => (
     <Protected>
-        <div>Private</div>
+        <PrivateComponent/>
     </Protected>
 );
 

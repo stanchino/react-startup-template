@@ -11,5 +11,5 @@ const ProtectedComponent = ({ isLoggedIn, children = null, component = <Login/> 
     return isLoggedIn ? children : component;
 };
 
-export { Logout }
+export { Login, Logout }
 export default connect(mapStateToProps)(ProtectedComponent);
