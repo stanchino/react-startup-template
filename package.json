@@ -48,6 +48,6 @@
         "statements": 100
       }
     },
-    "coverageReporters": ["text"]
+    "coverageReporters": ["text", "lcov"]
   }
 }
