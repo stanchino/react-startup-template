@@ -15,44 +15,23 @@ import App from './App';
 const history = createMemoryHistory();
 const { _, store } = configureStore(history);
 
+const testRoute = (description, path, component, count = 1) => {
+    it(description, () => {
+        history.push(path);
+        const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
+        expect(wrapper.find(component).length).toEqual(count);
+    });
+};
 
 describe('routes', () => {
     describe('for unauthenticated users', () => {
-        it('displays the Home component', () => {
-            history.push('/');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Home).length).toEqual(1);
-        });
-
-        it('does not show the logout link', () => {
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Logout).length).toEqual(0);
-        });
-
-        it('displays the Public component', () => {
-            history.push('/public');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Public).length).toEqual(1);
-        });
-
-        it('displays the NotFound component', () => {
-            history.push('/testUrlForNotFound');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(NotFound).length).toEqual(1);
-        });
-
-        it('shows the login form for the Private component', () => {
-            history.push('/private');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Login).length).toEqual(1);
-            expect(wrapper.find(PrivateComponent).length).toEqual(0);
-        });
-
-        it('shows the login form', () => {
-            history.push('/login');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Login).length).toEqual(1);
-        });
+        testRoute('shows the home paget', '/', Home);
+        testRoute('does not show the logout link', '/', Logout, 0);
+        testRoute('shows the public page', '/public', Public);
+        testRoute('displays the NotFound component', '/testUrlForNotFound', NotFound);
+        testRoute('shows the Login form for the /private path', '/private', Login);
+        testRoute('does not show the PrivateComponent for the /private path', '/private', PrivateComponent, 0);
+        testRoute('shows the login form', '/login', Login);
 
         it('does not login the user with invalid credentials', () => {
             store.dispatch({ type: login.REQUEST, payload: {} });
@@ -78,41 +57,17 @@ describe('routes', () => {
             store.dispatch(login.success({ profile: 'profile' }));
         });
 
-        it('displays the Home component', () => {
-            history.push('/');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Home).length).toEqual(1);
-        });
+        testRoute('shows the home page', '/', Home);
+        testRoute('shows the logout link', '/', Logout);
+        testRoute('shows the public page', '/public', Public);
+        testRoute('displays the NotFound component', '/testUrlForNotFound', NotFound);
+        testRoute('does not show the Login form for the /private path', '/private', Login, 0);
+        testRoute('shows the PrivateComponent for the /private path', '/private', PrivateComponent);
 
-        it('displays the Public component', () => {
-            history.push('/public');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Public).length).toEqual(1);
-        });
-
-        it('displays the NotFound component', () => {
-            history.push('/testUrlForNotFound');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(NotFound).length).toEqual(1);
-        });
-
-        it('shows the private component', () => {
-            history.push('/private');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Login).length).toEqual(0);
-            expect(wrapper.find(PrivateComponent).length).toEqual(1);
-        });
-
-        it('shows the login form', () => {
+        it('redirects to the home page from /login', () => {
             history.push('/login');
             mount(<Provider store={store}><App history={history}/></Provider>);
             expect(history.location.pathname).toEqual('/');
-        });
-
-        it('shows the logout link', () => {
-            history.push('/');
-            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Logout).length).toEqual(1);
         });
 
         it('logs the user out', () => {

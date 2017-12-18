@@ -10,64 +10,50 @@ import { Home, Public, PrivateComponent, Private, NotFound } from '.';
 import { Login } from '../auth/components';
 import { login } from '../auth/actions';
 
-describe('Home', () => {
-    it('renders without errors', () => {
-        const wrapper = renderer.create(<Home/>).toJSON();
-        expect(wrapper).toMatchSnapshot();
+const testComponent = (description, component) => {
+    it(description, () => {
+        expect(renderer.create(component).toJSON()).toMatchSnapshot();
     });
-});
+};
 
-describe('Public', () => {
-    it('renders without errors', () => {
-        const wrapper = renderer.create(<Public/>).toJSON();
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe('PrivateComponent', () => {
-    it('renders without errors', () => {
-        const wrapper = renderer.create(<PrivateComponent/>).toJSON();
-        expect(wrapper).toMatchSnapshot();
-    });
-});
-
-describe('NotFound', () => {
-    it('renders without errors', () => {
-        const wrapper = renderer.create(<NotFound/>).toJSON();
-        expect(wrapper).toMatchSnapshot();
-    });
+describe('components', () => {
+    testComponent('renders Home without errors', <Home/>);
+    testComponent('renders Public without errors', <Public/>);
+    testComponent('renders PrivateComponent without errors', <PrivateComponent/>);
+    testComponent('renders NotFound without errors', <NotFound/>);
 });
 
 describe('Private', () => {
     const history = createMemoryHistory();
     const { _, store } = configureStore(history);
+    let subject;
 
     describe('for unauthenticated users', () => {
+        beforeEach(() => {
+            subject = mount(<Provider store={store}><Private/></Provider>);
+        });
 
         it('will render the login form', () => {
-            const wrapper = mount(<Provider store={store}><Private/></Provider>);
-            expect(wrapper).toContainReact(<Login/>);
+            expect(subject).toContainReact(<Login/>);
         });
 
         it('will not show the private contents', () => {
-            const wrapper = mount(<Provider store={store}><Private/></Provider>);
-            expect(wrapper).not.toContainReact(<PrivateComponent/>);
+            expect(subject).not.toContainReact(<PrivateComponent/>);
         });
     });
 
     describe('for authenticated users', () => {
         beforeEach(() => {
             store.dispatch(login.success({profile: 'blah'}));
+            subject = mount(<Provider store={store}><Private/></Provider>);
         });
 
         it('will not render the login form', () => {
-            const wrapper = mount(<Provider store={store}><Private/></Provider>);
-            expect(wrapper).not.toContainReact(<Login/>);
+            expect(subject).not.toContainReact(<Login/>);
         });
 
         it('will show the private contents', () => {
-            const wrapper = mount(<Provider store={store}><Private /></Provider>);
-            expect(wrapper).toContainReact(<PrivateComponent/>);
+            expect(subject).toContainReact(<PrivateComponent/>);
         });
     });
 });
