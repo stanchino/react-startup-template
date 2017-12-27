@@ -1,5 +1,5 @@
 import React from 'react';
-import Protected from '../auth/components';
+import { SignInForm, Protected } from '../auth/components';
 
 export const Home = () => (
     <div>Home</div>
@@ -14,7 +14,7 @@ export const PrivateComponent = () => (
 );
 
 export const Private = () => (
-    <Protected>
+    <Protected component={<SignInForm />}>
         <PrivateComponent/>
     </Protected>
 );

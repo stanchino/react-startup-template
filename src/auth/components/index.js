@@ -1,15 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import Login from './Login';
-import Logout from './Logout';
+import SignUpLink from './SignUpLink';
+import SignUpForm from './SignUpForm';
+import SignInLink from './SignInLink';
+import SignInForm from './SignInForm';
+import SignOutLink from './SignOutLink';
+import Protected from './Protected';
 
-const mapStateToProps = state => ({
-    isLoggedIn: state.auth.isLoggedIn
-});
-
-const ProtectedComponent = ({ isLoggedIn, children = null, component = <Login/> }) => {
-    return isLoggedIn ? children : component;
-};
-
-export { Login, Logout }
-export default connect(mapStateToProps)(ProtectedComponent);
+export { SignUpLink, SignUpForm, SignInLink, SignInForm, SignOutLink, Protected }

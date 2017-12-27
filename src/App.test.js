@@ -1,19 +1,19 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import createMemoryHistory from 'history/createBrowserHistory';
 import configureStore from "./stores";
 
 import { Home, Public, PrivateComponent, NotFound } from './components/index';
-import { Login, Logout } from './auth/components';
+import { SignInForm, SignUpForm, SignOutLink } from './auth/components';
 
-import { login, logout } from './auth/actions';
+import { signIn, logout } from './auth/actions';
 
 import App from './App';
 
 const history = createMemoryHistory();
-const { _, store } = configureStore(history);
+const { store } = configureStore(history);
 
 const testRoute = (description, path, component, count = 1) => {
     it(description, () => {
@@ -25,43 +25,46 @@ const testRoute = (description, path, component, count = 1) => {
 
 describe('routes', () => {
     describe('for unauthenticated users', () => {
-        testRoute('shows the home paget', '/', Home);
-        testRoute('does not show the logout link', '/', Logout, 0);
+        beforeEach(() => {
+            store.dispatch(logout());
+        });
+        testRoute('shows the home page', '/', Home);
         testRoute('shows the public page', '/public', Public);
         testRoute('displays the NotFound component', '/testUrlForNotFound', NotFound);
-        testRoute('shows the Login form for the /private path', '/private', Login);
+        testRoute('shows the Login form for the /private path', '/private', SignInForm);
         testRoute('does not show the PrivateComponent for the /private path', '/private', PrivateComponent, 0);
-        testRoute('shows the login form', '/login', Login);
+        testRoute('shows the registration form', '/register', SignUpForm);
+        testRoute('shows the login form', '/login', SignInForm);
 
         it('does not login the user with invalid credentials', () => {
-            store.dispatch({ type: login.REQUEST, payload: {} });
+            store.dispatch(signIn.request({ username: 'blah', password: 'blah'}));
             const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Login).length).toEqual(1);
+            expect(wrapper.find(SignInForm).length).toEqual(1);
+        });
+    });
+
+    describe('when the user logs in', () => {
+        beforeEach(() => {
+            store.dispatch(signIn.success({ username: 'johndoe', password: 'password' }));
         });
 
-        describe('when the user logs in', () => {
-           beforeEach(() => {
-               store.dispatch({ type: login.REQUEST, payload: { username: 'johndoe', password: 'password' } });
-           });
-
-            it('logs the user in with valid credentials', () => {
-                const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-                expect(wrapper.find(Login).length).toEqual(0);
-                expect(wrapper.find(Logout).length).toEqual(1);
-            });
+        it('logs the user in with valid credentials', () => {
+            const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
+            expect(wrapper.find(SignInForm).length).toEqual(0);
+            expect(wrapper.find(SignOutLink).length).toEqual(1);
         });
     });
 
     describe('for authenticated users', () => {
         beforeEach(() => {
-            store.dispatch(login.success({ profile: 'profile' }));
+            store.dispatch(signIn.success({ username: 'johndoe', email: 'john@doe.com' }));
         });
 
         testRoute('shows the home page', '/', Home);
-        testRoute('shows the logout link', '/', Logout);
+        testRoute('shows the logout link', '/', SignOutLink);
         testRoute('shows the public page', '/public', Public);
         testRoute('displays the NotFound component', '/testUrlForNotFound', NotFound);
-        testRoute('does not show the Login form for the /private path', '/private', Login, 0);
+        testRoute('does not show the Login form for the /private path', '/private', SignInForm, 0);
         testRoute('shows the PrivateComponent for the /private path', '/private', PrivateComponent);
 
         it('redirects to the home page from /login', () => {
@@ -70,12 +73,18 @@ describe('routes', () => {
             expect(history.location.pathname).toEqual('/');
         });
 
+        it('redirects to the home page from /register', () => {
+            history.push('/register');
+            mount(<Provider store={store}><App history={history}/></Provider>);
+            expect(history.location.pathname).toEqual('/');
+        });
+
         it('logs the user out', () => {
             history.push('/');
             const wrapper = mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(wrapper.find(Logout).length).toEqual(1);
+            expect(wrapper.find(SignOutLink).length).toEqual(1);
             store.dispatch(logout());
-            expect(wrapper.render().find(Logout).length).toEqual(0);
+            expect(wrapper.render().find(SignOutLink).length).toEqual(0);
         });
     });
 });

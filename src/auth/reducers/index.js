@@ -13,4 +13,7 @@ const config = {
     }),
 };
 
-export default { auth: persistReducer(config, authReducer), form: formReducer };
+export default {
+    auth: persistReducer(config, authReducer),
+    form: formReducer
+};
