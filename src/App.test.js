@@ -23,6 +23,14 @@ const testRoute = (description, path, component, count = 1) => {
     });
 };
 
+const behavesLikeRouteWithRedirect = (path, redirect_path = '/') => {
+    it(`redirects from ${path} to ${redirect_path}`, () => {
+        history.push(path);
+        mount(<Provider store={store}><App history={history}/></Provider>);
+        expect(history.location.pathname).toEqual(redirect_path);
+    });
+};
+
 describe('routes', () => {
     describe('for unauthenticated users', () => {
         beforeEach(() => {
@@ -66,18 +74,8 @@ describe('routes', () => {
         testRoute('displays the NotFound component', '/testUrlForNotFound', NotFound);
         testRoute('does not show the Login form for the /private path', '/private', SignInForm, 0);
         testRoute('shows the PrivateComponent for the /private path', '/private', PrivateComponent);
-
-        it('redirects to the home page from /login', () => {
-            history.push('/login');
-            mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(history.location.pathname).toEqual('/');
-        });
-
-        it('redirects to the home page from /register', () => {
-            history.push('/register');
-            mount(<Provider store={store}><App history={history}/></Provider>);
-            expect(history.location.pathname).toEqual('/');
-        });
+        behavesLikeRouteWithRedirect('/login');
+        behavesLikeRouteWithRedirect('/register');
 
         it('logs the user out', () => {
             history.push('/');

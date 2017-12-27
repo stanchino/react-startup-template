@@ -8,6 +8,14 @@ import { Home, Private, Public, NotFound } from './components';
 
 import './App.css';
 
+const RouteWithRedirect = ({ component, path , redirect = '/' }) => (
+    <Route path={path}>
+        <Protected component={component}>
+            <Redirect to={'/'}/>
+        </Protected>
+    </Route>
+);
+
 export default ({ history }) => (
     <ConnectedRouter history={history}>
         <div className='container'>
@@ -23,16 +31,8 @@ export default ({ history }) => (
                 <Route exact path={'/'} component={Home} />
                 <Route path={'/public'} component={Public} />
                 <Route path={'/private'} component={Private} />
-                <Route path={'/login'}>
-                    <Protected component={<SignInForm />}>
-                        <Redirect to={'/'}/>
-                    </Protected>
-                </Route>
-                <Route path={'/register'}>
-                    <Protected component={<SignUpForm />}>
-                        <Redirect to={'/'}/>
-                    </Protected>
-                </Route>
+                <RouteWithRedirect path={'/login'} component={<SignInForm />} />
+                <RouteWithRedirect path={'/register'} component={<SignUpForm />} />
                 <Route component={NotFound} />
             </Switch>
         </div>
