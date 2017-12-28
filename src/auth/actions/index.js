@@ -1,6 +1,6 @@
-import { createFormAction } from 'redux-form-saga';
+import { createFormAction } from "redux-form-saga";
 
-import * as types from './types';
+import * as types from "./types";
 
 export const logout = () => ({
     type: types.SIGN_OUT

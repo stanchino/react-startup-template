@@ -1,10 +1,10 @@
-import createSagaMiddleware from 'redux-saga';
-import { createStore, applyMiddleware } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
-import { persistStore } from 'redux-persist'
+import createSagaMiddleware from "redux-saga";
+import { createStore, applyMiddleware } from "redux";
+import { routerMiddleware } from "react-router-redux";
+import { persistStore } from "redux-persist"
 
-import rootReducer from '../reducers';
-import rootSaga from '../sagas';
+import rootReducer from "../reducers";
+import rootSaga from "../sagas";
 
 export default history => {
     const sagaMiddleware = createSagaMiddleware();

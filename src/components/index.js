@@ -1,5 +1,5 @@
-import React from 'react';
-import { SignInForm, Protected } from '../auth/components';
+import React from "react";
+import { SignInForm, Protected } from "../auth/components";
 
 export const Home = () => (
     <div>Home</div>

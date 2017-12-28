@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/es/integration/react';
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/es/integration/react";
 
-import createHistory from 'history/createBrowserHistory';
-import configureStore from './stores';
+import createHistory from "history/createBrowserHistory";
+import configureStore from "./stores";
 
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from "./registerServiceWorker";
 
 import App from "./App";
 
-import './index.css';
+import "./index.css";
 
 const history = createHistory();
 const { persistor, store } = configureStore(history);
@@ -22,6 +22,6 @@ ReactDOM.render(
             <App history={history}/>
         </PersistGate>
     </Provider>,
-    document.getElementById('root')
+    document.getElementById("root")
 );
 registerServiceWorker();

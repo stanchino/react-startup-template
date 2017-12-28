@@ -1,8 +1,8 @@
-import { takeEvery, put, call, fork, select } from 'redux-saga/effects';
-import { SubmissionError } from 'redux-form';
-import { formActionSaga } from 'redux-form-saga';
-import { signInRequest, signUpRequest, confirmationRequest } from '../services';
-import { signIn, signUp, confirmation } from '../actions';
+import { takeEvery, put, call, fork, select } from "redux-saga/effects";
+import { SubmissionError } from "redux-form";
+import { formActionSaga } from "redux-form-saga";
+import { signInRequest, signUpRequest, confirmationRequest } from "../services";
+import { signIn, signUp, confirmation } from "../actions";
 
 function* signInWatcher() {
     yield takeEvery(signIn.REQUEST, handleSignInSaga);
@@ -18,24 +18,26 @@ function* confirmationWatcher() {
 
 const getProfile = state => ({ ...state.auth.profile });
 
+const formError = (action, errors) => (
+    put(action.failure(new SubmissionError(errors)))
+);
+
 export function* handleSignInSaga(action) {
     const { email, username, password } = action.payload;
 
     let profile = { email: email, username: username };
 
     try {
-        let profile = yield call(signInRequest, { username, password });
+        profile = yield call(signInRequest, { username, password });
         yield put(signIn.success(profile));
     } catch (error) {
-        if (error.code === 'UserNotConfirmedException') {
+        if ("UserNotConfirmedException" === error.code) {
             yield put(signUp.success(profile));
         } else {
-            const formError = new SubmissionError({
-                username: 'Invalid username provided.',
+            yield formError(signIn, {
+                username: "Invalid username provided.",
                 _error: error.message
             });
-
-            yield put(signIn.failure(formError));
         }
     }
 }
@@ -48,16 +50,14 @@ export function* handleSignUpSaga(action) {
         yield call(signUpRequest, { email, username, password });
         yield put(signUp.success(profile));
     } catch (error) {
-        if (error.code === 'UsernameExistsException') {
+        if ("UsernameExistsException" === error.code) {
             yield put(signIn.request({ ...profile, password: password }));
-        } else if (error.code === 'UserNotConfirmedException') {
+        } else if ("UserNotConfirmedException" === error.code) {
             yield put(signUp.success(profile));
         } else {
-            const formError = new SubmissionError({
+            yield formError(signUp, {
                 _error: error.message
             });
-
-            yield put(signUp.failure(formError));
         }
     }
 }
@@ -71,11 +71,10 @@ export function* handleConfirmationSaga(action) {
         yield call(confirmationRequest, { ...profile, code });
         yield put(confirmation.success(profile));
     } catch (error) {
-        const formError = new SubmissionError({
-            code: 'Invalid code',
+        yield formError(confirmation, {
+            code: "Invalid code",
             _error: error.message
         });
-        yield put(confirmation.failure(formError));
     }
 }
 

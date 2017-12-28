@@ -1,6 +1,6 @@
-import initialState from './initialState';
-import { signIn, signUp, confirmation } from '../actions';
-import * as types from '../actions/types';
+import initialState from "./initialState";
+import { signIn, signUp, confirmation } from "../actions";
+import * as types from "../actions/types";
 
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {

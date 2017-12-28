@@ -1,6 +1,6 @@
-import { CognitoUser } from 'amazon-cognito-identity-js'
+import { CognitoUser } from "amazon-cognito-identity-js"
 
-import userPool from './config';
+import userPool from "./config";
 
 export default ({ username, code }) => {
     const userData = {
@@ -11,7 +11,7 @@ export default ({ username, code }) => {
     const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-        cognitoUser.confirmRegistration(code, true, function(err, result) {
+        cognitoUser.confirmRegistration(code, false, function(err, result) {
             if (err) {
                 reject(err)
             } else {

@@ -1,16 +1,12 @@
-import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { signIn } from '../actions';
-import FormField from './FormField';
+import React from "react";
+import { Field, reduxForm } from "redux-form";
+import { signIn } from "../actions";
+import FormField from "./FormField";
+import wrapWithForm from "./Form";
 
-const LoginForm = ({ error, handleSubmit, pristine, reset, submitting }) => (
-    <form onSubmit={handleSubmit(signIn)}>
-        {error && <div><strong>{error}</strong></div>}
-        <Field component={FormField} type='text' name='username' placeholder='Username'/>
-        <Field component={FormField} type='password' name='password' placeholder='Password'/>
-        <button type={'submit'} disabled={pristine || submitting}>Login</button>
-        <button type={'reset'} disabled={pristine || submitting} onClick={reset}>Cancel</button>
-    </form>
-);
+const LoginForm = wrapWithForm([
+    <Field component={FormField} type={"text"} name={"username"} placeholder={"Username"} key={"username"} />,
+    <Field component={FormField} type={"password"} name={"password"} placeholder={"Password"} key={"password"} />
+]);
 
-export default reduxForm({form: 'login'})(LoginForm);
+export default reduxForm({form: "login", onSubmit: signIn})(LoginForm);
