@@ -6,7 +6,7 @@ import { mount } from "enzyme";
 import { matchSnapshot, renderFormErrors } from "./test/shared-examples";
 
 import configureStore from "../../stores";
-import SignUpForm from "./SignUpForm";
+import { SignUpForm } from ".";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

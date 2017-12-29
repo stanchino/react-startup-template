@@ -11,7 +11,7 @@ export default ({ username, code }) => {
     const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
-        cognitoUser.confirmRegistration(code, false, function(err, result) {
+        cognitoUser.confirmRegistration(code, false, (err, result) => {
             if (err) {
                 reject(err)
             } else {
