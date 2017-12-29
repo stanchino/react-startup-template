@@ -1,10 +1,10 @@
 import sagaHelper from "redux-saga-testing";
 import { call, put, select } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
-import { confirmationRequest } from "../services";
-import { confirmation } from "../actions";
+import { confirmationRequest } from "../../services/index";
+import { confirmation } from "../../actions/index";
 
-import { handleConfirmationSaga, getProfile } from "./confirmation";
+import { handleConfirmationSaga, getProfile } from "../confirmation";
 
 const payload = { code: "1234" };
 const profile = { username: "user" };

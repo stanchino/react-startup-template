@@ -8,7 +8,7 @@ const factory = (err, result) => ({
 });
 
 describe("test confirmation", () => {
-    const subject = () => (require("./confirmation").default);
+    const subject = () => (require("../confirmation").default);
     const expectCallbacks = (mock) => {
         expect(mock.CognitoUserPool).toHaveBeenCalled();
         expect(mock.CognitoUser).toHaveBeenCalled();

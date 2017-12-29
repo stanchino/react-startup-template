@@ -4,11 +4,11 @@ import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 
 import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../stores";
+import configureStore from "../../stores/index";
 
-import { Home, Public, PrivateComponent, Private, NotFound } from ".";
-import { SignInForm } from "../auth/components";
-import { signIn } from "../auth/actions";
+import { Home, Public, PrivateComponent, Private, NotFound } from "../index";
+import { SignInForm } from "../../auth/components/index";
+import { signIn } from "../../auth/actions/index";
 
 const testComponent = (description, component) => {
     it(description, () => {

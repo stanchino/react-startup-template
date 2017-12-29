@@ -1,10 +1,10 @@
 import sagaHelper from "redux-saga-testing";
 import { call, put } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
-import { signUpRequest } from "../services";
-import { signUp, signIn } from "../actions";
+import { signUpRequest } from "../../services/index";
+import { signUp, signIn } from "../../actions/index";
 
-import { handleSignUpSaga } from "./signUp";
+import { handleSignUpSaga } from "../signUp";
 
 const payload = { email: "john@doe.com", username: "user", password: "pass" };
 const profile = { email: "john@doe.com", username: "user"};

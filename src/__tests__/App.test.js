@@ -3,14 +3,14 @@ import { Provider } from "react-redux";
 import { mount } from "enzyme";
 
 import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "./stores";
+import configureStore from "../stores/index";
 
-import { Home, Public, PrivateComponent, NotFound } from "./components/index";
-import { SignInForm, SignUpForm, SignOutLink } from "./auth/components";
+import { Home, Public, PrivateComponent, NotFound } from "../components/index";
+import { SignInForm, SignUpForm, SignOutLink } from "../auth/components/index";
 
-import { signIn, logout } from "./auth/actions";
+import { signIn, logout } from "../auth/actions/index";
 
-import App from "./App";
+import App from "../App";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

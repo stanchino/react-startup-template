@@ -3,10 +3,10 @@ import { reduxForm } from "redux-form";
 import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
 
-import configureStore from "../../stores";
+import configureStore from "../../../stores/index";
 
-import wrapWithForm from "./Form";
-import { matchSnapshot } from "./test/shared-examples";
+import wrapWithForm from "../Form";
+import { matchSnapshot } from "../test/shared-examples";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

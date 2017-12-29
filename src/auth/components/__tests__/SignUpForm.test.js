@@ -3,10 +3,10 @@ import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
 import { mount } from "enzyme";
 
-import { matchSnapshot, renderFormErrors } from "./test/shared-examples";
+import { matchSnapshot, renderFormErrors } from "../test/shared-examples";
 
-import configureStore from "../../stores";
-import { SignUpForm } from ".";
+import configureStore from "../../../stores/index";
+import { SignUpForm } from "../index";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

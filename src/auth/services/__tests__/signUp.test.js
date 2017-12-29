@@ -1,5 +1,5 @@
-import signUpRequest from "./signUp";
-import userPool from "./config";
+import signUpRequest from "../signUp";
+import userPool from "../config";
 
 const payload = { email: "john@doe.com", username: "user", password: "pass"};
 

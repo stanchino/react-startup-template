@@ -1,10 +1,10 @@
 import sagaHelper from "redux-saga-testing";
 import { call, put } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
-import { signInRequest } from "../services";
-import { signIn, signUp } from "../actions";
+import { signInRequest } from "../../services/index";
+import { signIn, signUp } from "../../actions/index";
 
-import { handleSignInSaga } from "./signIn";
+import { handleSignInSaga } from "../signIn";
 
 const payload = { username: "user", password: "pass" };
 

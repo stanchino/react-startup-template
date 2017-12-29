@@ -3,11 +3,11 @@ import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
 
-import configureStore from "../../stores";
+import configureStore from "../../../stores/index";
 
-import { Protected, SignInForm }  from ".";
-import ConfirmationForm from "./ConfirmationForm";
-import { signIn, signUp, confirmation, logout } from "../actions";
+import { Protected, SignInForm }  from "../index";
+import ConfirmationForm from "../ConfirmationForm";
+import { signIn, signUp, confirmation, logout } from "../../actions/index";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

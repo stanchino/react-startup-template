@@ -4,10 +4,10 @@ import createMemoryHistory from "history/createBrowserHistory";
 import { SubmissionError } from "redux-form";
 import { mount } from "enzyme";
 
-import configureStore from "../../stores";
-import { matchSnapshot } from "./test/shared-examples";
+import configureStore from "../../../stores/index";
+import { matchSnapshot } from "../test/shared-examples";
 
-import ConfirmationForm from "./ConfirmationForm";
+import ConfirmationForm from "../ConfirmationForm";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

@@ -9,7 +9,7 @@ const factory = assertion => ({
 });
 
 describe("test signInRequest", () => {
-    const subject = () => (require("./signIn").default);
+    const subject = () => (require("../signIn").default);
     const expectCallbacks = (mock) => {
         expect(mock.CognitoUserPool).toHaveBeenCalled();
         expect(mock.AuthenticationDetails).toHaveBeenCalledWith({Username: "user", Password: "pass"});
