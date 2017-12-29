@@ -10,4 +10,4 @@ const RegistrationForm = wrapWithForm([
     <Field component={renderField} type="password" name="password" placeholder="Password" key={"password"}/>
 ]);
 
-export default reduxForm({form: "register", onSubmit: signUp})(RegistrationForm);
+export default reduxForm({form: "register", onSubmit: signUp, submitText: "Sign Up"})(RegistrationForm);

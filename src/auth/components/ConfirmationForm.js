@@ -8,4 +8,4 @@ const ConfirmationComponent = wrappedWithForm(
     <Field component={renderField} type="text" name="code" placeholder="Confirmation Code"/>
 );
 
-export default reduxForm({form: "confirmation", onSubmit: confirmation})(ConfirmationComponent);
+export default reduxForm({form: "confirmation", onSubmit: confirmation, submitText: "Confirm"})(ConfirmationComponent);

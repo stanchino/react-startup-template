@@ -9,4 +9,4 @@ const LoginForm = wrapWithForm([
     <Field component={FormField} type={"password"} name={"password"} placeholder={"Password"} key={"password"} />
 ]);
 
-export default reduxForm({form: "login", onSubmit: signIn})(LoginForm);
+export default reduxForm({form: "login", onSubmit: signIn, submitText: "Sign In"})(LoginForm);
