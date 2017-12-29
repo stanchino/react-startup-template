@@ -42,7 +42,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!src/**/test/shared-examples.{js,jsx}",
+      "!src/**/shared-examples.{js,jsx}",
       "!<rootDir>/node_modules/",
       "!src/index.js",
       "!src/registerServiceWorker.js",

@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import createMemoryHistory from "history/createBrowserHistory";
 import { mount } from "enzyme";
 
-import { matchSnapshot, renderFormErrors } from "../test/shared-examples";
+import { matchSnapshot, renderFormErrors } from "../tests/shared-examples";
 
 import configureStore from "../../../stores/index";
 import { SignInForm } from "../index";
