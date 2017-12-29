@@ -14,23 +14,23 @@ describe("test confirmation", () => {
         expect(mock.CognitoUser).toHaveBeenCalled();
     };
 
-    it ('confirms the user registration successfully', async () => {
+    beforeEach(() => {
+        jest.resetModules();
+    });
+
+    it ('confirms the user registration successfully', () => {
         const mock = factory(null, { success: 'success'});
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        expect(await subject()({ username: "user", code: "code"})).toEqual({ success: 'success'});
+        expect(subject()({ username: "user", code: "code"})).resolves.toEqual({ success: 'success'});
         expectCallbacks(mock);
     });
 
-    it ('raises an error when the confirmation fails', async () => {
+    it ('raises an error when the confirmation fails', () => {
         const mock = factory({ error: 'error'}, null);
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        try {
-            await subject()({ username: "user", code: "code"})
-        } catch (e) {
-            expect(e).toEqual({ error: 'error'});
-            expectCallbacks(mock);
-        }
+        expect(subject()({ username: "user", code: "code"})).rejects.toEqual({ error: 'error'});
+        expectCallbacks(mock);
     });
 });

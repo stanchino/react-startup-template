@@ -16,28 +16,28 @@ describe("test signInRequest", () => {
         expect(mock.CognitoUser).toHaveBeenCalled();
     };
 
-    it ('signs the user successfully', async () => {
+    beforeEach(() => {
+        jest.resetModules();
+    });
+
+    it ('signs the user successfully', () => {
         const email = { email: "john@doe.com" };
         const mock = factory(callbacks => (
             callbacks.onSuccess({ idToken: email })
         ));
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        expect(await subject()({ username: "user", password: "pass"})).toEqual(email);
+        expect(subject()({ username: "user", password: "pass"})).resolves.toEqual(email);
         expectCallbacks(mock);
     });
 
-    it ('rejects the promise whe authentication fails', async () => {
+    it ('rejects the promise whe authentication fails', () => {
         const mock = factory(callbacks => (
             callbacks.onFailure({ error: "error" })
         ));
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        try {
-            await subject()({ username: "user", password: "pass"});
-        } catch (e) {
-            expectCallbacks(mock);
-            expect(e).toEqual({ error: 'error' });
-        }
+        expect(subject()({ username: "user", password: "pass"})).rejects.toEqual({ error: 'error' });
+        expectCallbacks(mock);
     });
 });

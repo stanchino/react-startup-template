@@ -1,24 +1,18 @@
 import signUpRequest from "./signUp";
 import userPool from "./config";
 
-describe("test signUpRequest", () => {
-    it ('registers the user successfully', async () => {
+const payload = { email: "john@doe.com", username: "user", password: "pass"};
+
+const respondsWith = (description, defer, err, success, expected) => {
+    it (description, () => {
         const spy = jest.spyOn(userPool, "signUp").mockImplementation((username, password, attributes, validation, callback) => {
-            callback(null, { success: 'success'});
+            callback(err, success);
         });
-        expect(await signUpRequest({ email: "john@doe.com", username: "user", password: "pass"})).toEqual({ success: 'success' });
+        expect(signUpRequest(payload))[defer].toEqual(expected);
         expect(spy).toHaveBeenCalled();
     });
-
-    it ('raises an error when the registration fails', async () => {
-        const spy = jest.spyOn(userPool, "signUp").mockImplementation((username, password, attributes, validation, callback) => {
-            callback({ error: 'error'});
-        });
-        try {
-            await signUpRequest({email: "john@doe.com", username: "user", password: "pass"});
-        } catch (e) {
-            expect(e).toEqual({ error: 'error'});
-            expect(spy).toHaveBeenCalled();
-        }
-    });
+}
+describe("test signUpRequest", () => {
+    respondsWith("registers the user successfully", "resolves", null, { success: 'success'}, { success: 'success'});
+    respondsWith("raises an error when the registration fails", "rejects", { error: 'error'}, null, { error: 'error'});
 });
