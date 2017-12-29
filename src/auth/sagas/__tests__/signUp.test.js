@@ -6,8 +6,8 @@ import { signUp, signIn } from "../../actions/index";
 
 import { handleSignUpSaga } from "../signUp";
 
-const payload = { email: "john@doe.com", username: "user", password: "pass" };
-const profile = { email: "john@doe.com", username: "user"};
+const payload = { email: "john@doe.com", password: "pass" };
+const profile = { email: "john@doe.com"};
 
 const callsActionOnError = (description, code, action) => {
     describe(description, () => {
@@ -65,6 +65,6 @@ describe("handleSignUpSaga", () => {
         });
     });
 
-    callsActionOnError("When the user already exists", "UsernameExistsException", signIn.request(payload));
+    callsActionOnError("When the user already exists", "UsernameExistsException", signIn.request({ username: "john@doe.com", password: "pass" }));
     callsActionOnError("When the user is not confirmed", "UserNotConfirmedException", signUp.success(profile));
 });

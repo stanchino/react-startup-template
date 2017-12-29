@@ -18,10 +18,12 @@ function* confirmationWatcher() {
     yield takeEvery(confirmation.REQUEST, handleConfirmationSaga);
 }
 
+const sagas = [signInWatcher, signUpWatcher, confirmationWatcher, formActionSaga];
+
 export const formError = (action, errors) => (
     put(action.failure(new SubmissionError(errors)))
 );
 
 export default function* () {
-    yield [fork(signInWatcher), fork(signUpWatcher), fork(confirmationWatcher), fork(formActionSaga)];
+    yield sagas.map(saga => fork(saga));
 };

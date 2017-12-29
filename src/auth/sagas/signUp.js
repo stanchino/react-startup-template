@@ -4,15 +4,15 @@ import { signIn, signUp } from "../actions";
 import { formError } from "./index";
 
 export function* handleSignUpSaga(action) {
-    const { email, username, password } = action.payload;
-    let profile = { email: email, username: username };
+    const { email, password } = action.payload;
+    let profile = { email: email };
 
     try {
-        yield call(signUpRequest, { email, username, password });
+        yield call(signUpRequest, { ...profile, password });
         yield put(signUp.success(profile));
     } catch (error) {
         if ("UsernameExistsException" === error.code) {
-            yield put(signIn.request({ ...profile, password: password }));
+            yield put(signIn.request({ username: email, password: password }));
         } else if ("UserNotConfirmedException" === error.code) {
             yield put(signUp.success(profile));
         } else {

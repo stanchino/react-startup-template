@@ -2,9 +2,9 @@ import { CognitoUser } from "amazon-cognito-identity-js"
 
 import userPool from "./config";
 
-export default ({ username, code }) => {
+export default ({ email, code }) => {
     const userData = {
-        Username: username,
+        Username: email,
         Pool: userPool
     };
 
