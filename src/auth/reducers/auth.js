@@ -1,6 +1,12 @@
-import initialState from "./initialState";
 import { signIn, signUp, confirmation } from "../actions";
 import * as types from "../actions/types";
+
+const initialState = {
+    isLoggedIn: false,
+    isConfirmed: false,
+    isRegistered: false,
+    profile: null
+};
 
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {
