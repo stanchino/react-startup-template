@@ -46,10 +46,7 @@
       "!src/**/shared-examples.{js,jsx}",
       "!<rootDir>/node_modules/",
       "!src/index.js",
-      "!src/registerServiceWorker.js",
-      "!src/auth/components/index.js",
-      "!src/auth/services/index.js",
-      "!src/reducers/index.js"
+      "!src/registerServiceWorker.js"
     ],
     "coverageThreshold": {
       "global": {

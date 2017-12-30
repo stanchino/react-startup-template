@@ -6,7 +6,7 @@ import createMemoryHistory from "history/createBrowserHistory";
 import configureStore from "../../../stores/index";
 
 import wrapWithForm from "../Form";
-import { matchSnapshot } from "../tests/shared-examples";
+import { matchSnapshot } from "./shared-examples";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);

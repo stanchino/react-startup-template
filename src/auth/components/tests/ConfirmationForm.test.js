@@ -5,7 +5,7 @@ import { SubmissionError } from "redux-form";
 import { mount } from "enzyme";
 
 import configureStore from "../../../stores/index";
-import { matchSnapshot } from "../tests/shared-examples";
+import { matchSnapshot } from "./shared-examples";
 
 import ConfirmationForm from "../ConfirmationForm";
 
