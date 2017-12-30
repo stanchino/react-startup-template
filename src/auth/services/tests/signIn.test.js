@@ -1,6 +1,7 @@
 const factory = assertion => ({
     AuthenticationDetails: jest.fn(),
     CognitoUserPool: jest.fn(),
+    CookieStorage: jest.fn(),
     CognitoUser: jest.fn(() => ({
         authenticateUser: (data, callbacks) => {
             assertion(callbacks);

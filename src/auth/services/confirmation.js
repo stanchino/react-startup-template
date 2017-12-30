@@ -1,11 +1,12 @@
-import { CognitoUser } from "amazon-cognito-identity-js"
+import { CognitoUser, CookieStorage } from "amazon-cognito-identity-js"
 
 import userPool from "./config";
 
 export default ({ email, code }) => {
     const userData = {
         Username: email,
-        Pool: userPool
+        Pool: userPool,
+        Storage: new CookieStorage({domain: process.env.REACT_APP_COOKIE_DOMAIN})
     };
 
     const cognitoUser = new CognitoUser(userData);

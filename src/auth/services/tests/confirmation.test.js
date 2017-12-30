@@ -1,5 +1,6 @@
 const factory = (err, result) => ({
     CognitoUserPool: jest.fn(),
+    CookieStorage: jest.fn(),
     CognitoUser: jest.fn(() => ({
         confirmRegistration: (code, forceAliasCreation, callback) => {
             callback(err, result);

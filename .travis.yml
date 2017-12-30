@@ -3,6 +3,7 @@ env:
     - CC_TEST_REPORTER_ID=c82f1ea4fa4cd7b6604d49aef966095c308d98a18a46efe9b85c9c3ced74a48c
     - REACT_APP_COGNITO_USER_POOL_ID=us-east-1_fakepool
     - REACT_APP_COGNITO_CLIENT_ID=fakeclientid
+    - REACT_APP_COOKIE_DOMAIN=localhost
 language: node_js
 node_js:
   - "stable"
