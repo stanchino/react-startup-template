@@ -1,3 +1,5 @@
+import { expectCallbacks } from "./shared-examples";
+
 const factory = (err, result) => ({
     CognitoUserPool: jest.fn(),
     CookieStorage: jest.fn(),
@@ -10,28 +12,24 @@ const factory = (err, result) => ({
 
 describe("test confirmation", () => {
     const subject = () => (require("../confirmation").default);
-    const expectCallbacks = (mock) => {
-        expect(mock.CognitoUserPool).toHaveBeenCalled();
-        expect(mock.CognitoUser).toHaveBeenCalled();
-    };
 
     beforeEach(() => {
         jest.resetModules();
     });
 
     it ('confirms the user registration successfully', () => {
-        const mock = factory(null, { success: 'success'});
-        jest.doMock("amazon-cognito-identity-js", () => (mock));
+        const mocks = factory(null, { success: 'success'});
+        jest.doMock("amazon-cognito-identity-js", () => (mocks));
 
-        expect(subject()({ username: "user", code: "code"})).resolves.toEqual({ success: 'success'});
-        expectCallbacks(mock);
+        expect(subject()("john@doe.com", "code")).resolves.toEqual({ success: 'success'});
+        expectCallbacks([mocks.CognitoUserPool, mocks.CognitoUser]);
     });
 
     it ('raises an error when the confirmation fails', () => {
-        const mock = factory({ error: 'error'}, null);
-        jest.doMock("amazon-cognito-identity-js", () => (mock));
+        const mocks = factory({ error: 'error'}, null);
+        jest.doMock("amazon-cognito-identity-js", () => (mocks));
 
-        expect(subject()({ username: "user", code: "code"})).rejects.toEqual({ error: 'error'});
-        expectCallbacks(mock);
+        expect(subject()("john@doe.com", "code")).rejects.toEqual({ error: 'error'});
+        expectCallbacks([mocks.CognitoUserPool, mocks.CognitoUser]);
     });
 });

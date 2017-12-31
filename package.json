@@ -8,6 +8,8 @@
     "url": "https://github.com/stanchino/react-auth-boilerplate"
   },
   "dependencies": {
+    "@types/redux-actions": "^2.2.3",
+    "@types/redux-form": "^7.0.10",
     "amazon-cognito-identity-js": "^1.29.0",
     "aws-sdk": "^2.175.0",
     "history": "^4.7.2",
@@ -20,11 +22,11 @@
     "react-scripts": "1.0.17",
     "redux": "^3.7.2",
     "redux-form": "^7.2.0",
-    "redux-form-saga": "^0.2.0",
     "redux-form-validators": "^2.3.2",
     "redux-persist": "^5.4.0",
     "redux-persist-cookie-storage": "^0.4.0",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.15.0",
+    "redux-saga-routines": "^2.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

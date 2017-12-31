@@ -1,8 +1,8 @@
 import { CognitoUserAttribute } from "amazon-cognito-identity-js"
 
-import userPool from "./config";
+import { userPool } from "./utils";
 
-export default ({ email, password }) => {
+export default (email, password) => {
     const attributeList = [
         new CognitoUserAttribute({
             Name: "email",

@@ -1,31 +1,23 @@
-import {CognitoUser, AuthenticationDetails, CookieStorage } from "amazon-cognito-identity-js";
+import { AuthenticationDetails } from "amazon-cognito-identity-js";
+import { cognitoUser } from "./utils";
 
-import userPool from "./config";
+export default (username, password) => {
 
-export default function({ username, password }) {
-    const authenticationData = {
+    const authenticationDetails = new AuthenticationDetails({
         Username: username,
         Password: password
-    };
-    const authenticationDetails = new AuthenticationDetails(authenticationData);
+    });
 
-    const userData = {
-        Username: username,
-        Pool: userPool,
-        Storage: new CookieStorage({domain: process.env.REACT_APP_COOKIE_DOMAIN})
-    };
-
-    const cognitoUser = new CognitoUser(userData);
+    const user = cognitoUser(username);
 
     return new Promise((resolve, reject) => {
-        cognitoUser.authenticateUser(authenticationDetails, {
-            onSuccess: function(result) {
-                const { email } = result.idToken;
-                resolve({ email: email });
+        user.authenticateUser(authenticationDetails, {
+            onSuccess: function (session) {
+                resolve({user: user, session: session});
             },
-            onFailure: function(err) {
+            onFailure: function (err) {
                 reject(err);
             }
         })
     })
-}
+};

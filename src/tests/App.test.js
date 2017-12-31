@@ -8,7 +8,7 @@ import configureStore from "../stores/index";
 import { Home, Public, PrivateComponent, NotFound } from "../components/index";
 import { SignInForm, SignUpForm, SignOutLink } from "../auth/components/index";
 
-import { signIn, logout } from "../auth/actions/index";
+import { signInRoutine, signOutRoutine } from "../auth/actions/index";
 
 import App from "../App";
 
@@ -37,7 +37,7 @@ const behavesLikeRouteWithRedirect = (path, redirect_path = "/") => {
 describe("routes", () => {
     describe("for unauthenticated users", () => {
         beforeEach(() => {
-            store.dispatch(logout());
+            store.dispatch(signOutRoutine.fulfill());
         });
         testRoute("shows the home page", "/", Home);
         testRoute("shows the public page", "/public", Public);
@@ -47,14 +47,9 @@ describe("routes", () => {
         testRoute("shows the registration form", "/register", SignUpForm);
         testRoute("shows the login form", "/login", SignInForm);
 
-        it("does not login the user with invalid credentials", () => {
-            store.dispatch(signIn.request({ username: "blah", password: "blah"}));
-            expect(subject().find(SignInForm).length).toEqual(1);
-        });
-
         describe("when the user logs in", () => {
             beforeEach(() => {
-                store.dispatch(signIn.success({ username: "johndoe", password: "password" }));
+                store.dispatch(signInRoutine.success({ username: "johndoe" }));
             });
 
             it("logs the user in with valid credentials", () => {
@@ -71,7 +66,7 @@ describe("routes", () => {
 
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signIn.success({ username: "johndoe", email: "john@doe.com" }));
+            store.dispatch(signInRoutine.success({ username: "johndoe" }));
         });
 
         testRoute("shows the home page", "/", Home);
@@ -86,7 +81,7 @@ describe("routes", () => {
         it("logs the user out", () => {
             history.push("/");
             expect(subject().find(SignOutLink).length).toEqual(1);
-            store.dispatch(logout());
+            store.dispatch(signOutRoutine.fulfill());
             expect(subject().render().find(SignOutLink).length).toEqual(0);
         });
     });

@@ -1,62 +1,39 @@
-import sagaHelper from "redux-saga-testing";
-import { call, put, select } from "redux-saga/effects";
-import { SubmissionError } from "redux-form";
-import { confirmationRequest } from "../../services/index";
-import { confirmation } from "../../actions/index";
+import { call, put } from "redux-saga/effects";
+import { confirmationRoutine, signInRoutine } from "../../actions";
+import { confirmationRequest } from "../../services";
 
 import { handleConfirmationSaga, getProfile } from "../confirmation";
 
-const payload = { code: "1234" };
-const profile = { username: "user" };
+import { finalizeSaga, setupSelectSaga, testSelector, testServiceFailure } from "./shared-examples";
+
+const values = { code: "1234" };
+const payload = { payload: { values: values } };
+const profile = { email: "john@doe.com" };
+
+const initializeSaga = () => (
+    setupSelectSaga(handleConfirmationSaga, payload, confirmationRoutine, getProfile, profile)
+);
 
 describe("handleConfirmationSaga", () => {
-    describe("When authentication is successful", () => {
-        const it = sagaHelper(handleConfirmationSaga({ payload: payload }));
-
-        it("retrieves the profile", result => {
-            expect(result).toEqual(select(getProfile));
-            return profile;
-        });
+    describe("When confirmation is successful", () => {
+        const it = initializeSaga();
 
         it("calls confirmationRequest", result => {
-            expect(result).toEqual(call(confirmationRequest, { ...payload, ...profile }));
+            expect(result).toEqual(call(confirmationRequest, profile.email, values.code));
         });
 
-        it("and triggers the confirmation success action", result => {
-            expect(result).toEqual(put(confirmation.success(profile)));
+        it("and then triggers the confirmation success action", result => {
+            expect(result).toEqual(put(confirmationRoutine.success()));
         });
 
-        it("and then nothing", result => {
-            expect(result).toBeUndefined();
+        it("and then triggers the signin success action", result => {
+            expect(result).toEqual(put(signInRoutine.success(profile)));
         });
+
+        finalizeSaga(it, confirmationRoutine);
     });
 
-    describe("When confirmation fails", () => {
-        const it = sagaHelper(handleConfirmationSaga({ payload: payload }));
-
-        it("retrieves the profile", result => {
-            expect(result).toEqual(select(getProfile));
-            return { username: "user" };
-        });
-
-        it("calls confirmationRequest", result => {
-            expect(result).toEqual(call(confirmationRequest, { ...payload, ...profile }));
-            return new Error("Error in the confirmation request.");
-        });
-
-        it("and triggers the confirmation error action", result => {
-            expect(result).toEqual(put(confirmation.failure(new SubmissionError())));
-        });
-
-        it("and then nothing", result => {
-            expect(result).toBeUndefined();
-        });
-    });
+    testServiceFailure(initializeSaga, confirmationRequest, confirmationRoutine, [profile.email, values.code]);
 });
 
-describe("getProfile", () => {
-   it("extracts the profile from the state", () => {
-       const state = { auth: { profile: profile }};
-       expect(getProfile(state)).toEqual(profile);
-   });
-});
+testSelector(getProfile, { auth: { signUp: { profile: profile } }}, profile);

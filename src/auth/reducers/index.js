@@ -1,7 +1,8 @@
-import { persistReducer } from "redux-persist"
+import { persistCombineReducers } from "redux-persist";
 import { reducer as formReducer  } from "redux-form";
-import { authReducer } from "./auth";
-import CookieStorage from "redux-persist-cookie-storage"
+import signIn from "./signIn";
+import signUp from "./signUp";
+import CookieStorage from "redux-persist-cookie-storage";
 
 const config = {
     key: "auth",
@@ -13,7 +14,9 @@ const config = {
     }),
 };
 
+const authReducers = { signIn, signUp };
+
 export default {
-    auth: persistReducer(config, authReducer),
+    auth: persistCombineReducers(config, authReducers),
     form: formReducer
 };

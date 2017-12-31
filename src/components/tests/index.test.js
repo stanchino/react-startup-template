@@ -4,11 +4,11 @@ import { Provider } from "react-redux";
 import renderer from "react-test-renderer";
 
 import createMemoryHistory from "history/createBrowserHistory";
-import configureStore from "../../stores/index";
+import configureStore from "../../stores";
 
-import { Home, Public, PrivateComponent, Private, NotFound } from "../index";
-import { SignInForm } from "../../auth/components/index";
-import { signIn } from "../../auth/actions/index";
+import { Home, Public, PrivateComponent, Private, NotFound } from "..";
+import { SignInForm } from "../../auth/components";
+import { signInRoutine } from "../../auth/actions";
 
 const testComponent = (description, component) => {
     it(description, () => {
@@ -44,7 +44,7 @@ describe("Private", () => {
 
     describe("for authenticated users", () => {
         beforeEach(() => {
-            store.dispatch(signIn.success({profile: "blah"}));
+            store.dispatch(signInRoutine.success({profile: "blah"}));
             subject = mount(<Provider store={store}><Private/></Provider>);
         });
 
