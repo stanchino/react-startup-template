@@ -7,7 +7,7 @@ import configureStore from "../../../stores/index";
 
 import { Protected, SignInForm }  from "../index";
 import ConfirmationForm from "../ConfirmationForm";
-import { signIn, signUp, confirmation, logout } from "../../actions/index";
+import { signInRoutine, signUpRoutine, confirmationRoutine, signOutRoutine } from "../../actions/index";
 
 const history = createMemoryHistory();
 const { store } = configureStore(history);
@@ -25,16 +25,14 @@ const rendersComponentOn = (description, action, method, component) => {
     });
 };
 
-describe("ConfirmationForm", () => {
-
+describe("Protected Component", () => {
     it("when the user is not registered", () => {
-        store.dispatch(logout({}));
+        store.dispatch(signOutRoutine.fulfill());
         expect(subject()).toContainReact(<SignInForm />);
     });
 
-    rendersComponentOn("when the user is registered", signUp, 'success', <ConfirmationForm/>);
-    rendersComponentOn("when the user is not registered", signUp, 'failure', <SignInForm />);
-    rendersComponentOn("when the user is logged in", signIn, 'success', <ChildComponent/>);
-    rendersComponentOn("when the user is confirmed", confirmation, 'success', <ChildComponent/>);
-    rendersComponentOn("when the user confirmation fails", confirmation, 'failure', <ConfirmationForm/>);
+    rendersComponentOn("when the user is not registered", signUpRoutine, 'failure', <SignInForm />);
+    rendersComponentOn("when the user is registered", signUpRoutine, 'success', <ConfirmationForm/>);
+    rendersComponentOn("when the user confirmation fails", confirmationRoutine, 'failure', <ConfirmationForm/>);
+    rendersComponentOn("when the user is logged in", signInRoutine, 'success', <ChildComponent/>);
 });

@@ -1,5 +1,5 @@
 export default state => ({
-    isLoggedIn: state.auth.isLoggedIn,
-    isRegistered: state.auth.isRegistered,
-    isConfirmed: state.auth.isConfirmed
+    isLoggedIn: state.auth.signIn.isLoggedIn,
+    isRegistered: state.auth.signUp.isRegistered,
+    isConfirmed: state.auth.signUp.isConfirmed
 });

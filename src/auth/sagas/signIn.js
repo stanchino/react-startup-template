@@ -1,24 +1,24 @@
 import {call, put } from "redux-saga/effects";
-import { signIn, signUp } from "../actions";
-import { signInRequest } from "../services";
+import { signInRoutine, signUpRoutine } from "../actions";
+import { signInRequest, userAttributes } from "../services";
 import { formError } from ".";
 
-export function* handleSignInSaga(action) {
-    const { username, password } = action.payload;
-
-    let profile = { username: username };
-
+export function* handleSignInSaga({ payload: { values: { username, password } } }) {
     try {
-        profile = yield call(signInRequest, { username, password });
-        yield put(signIn.success(profile));
+        yield put(signInRoutine.request());
+        const { user } = yield call(signInRequest, username, password);
+        const profile = yield call(userAttributes, user);
+        yield put(signInRoutine.success(profile));
     } catch (error) {
         if ("UserNotConfirmedException" === error.code) {
-            yield put(signUp.success(profile));
+            yield put(signUpRoutine.success({ email: username }));
         } else {
-            yield formError(signIn, {
-                username: "Invalid username provided.",
+            yield formError(signInRoutine, {
+                username: "Invalid user.",
                 _error: error.message
             });
         }
+    } finally {
+        yield put(signInRoutine.fulfill())
     }
 }

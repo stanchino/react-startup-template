@@ -1,16 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { logout } from "../actions";
+import { signOutRoutine } from "../actions";
 
 const Logout = ({ isLoggedIn, children, actions, ...props }) => (
-    isLoggedIn ? <button {...props} onClick={actions.logout}>{children}</button> : null
+    isLoggedIn ? <button {...props} onClick={actions.signOutRoutine}>{children}</button> : null
 );
 
 const mapDispatchToProps = (dispatch) => ({
-    actions: bindActionCreators({ logout }, dispatch),
+    actions: bindActionCreators({ signOutRoutine }, dispatch),
 });
 
 export default connect(state => ({
-    isLoggedIn: state.auth.isLoggedIn,
+    isLoggedIn: state.auth.signIn.isLoggedIn,
 }), mapDispatchToProps)(Logout);

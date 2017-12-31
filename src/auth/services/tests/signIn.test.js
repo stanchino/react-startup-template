@@ -1,7 +1,6 @@
 const factory = assertion => ({
     AuthenticationDetails: jest.fn(),
     CognitoUserPool: jest.fn(),
-    CookieStorage: jest.fn(),
     CognitoUser: jest.fn(() => ({
         authenticateUser: (data, callbacks) => {
             assertion(callbacks);
@@ -11,6 +10,7 @@ const factory = assertion => ({
 
 describe("test signInRequest", () => {
     const subject = () => (require("../signIn").default);
+    const session = jest.fn();
     const expectCallbacks = (mock) => {
         expect(mock.CognitoUserPool).toHaveBeenCalled();
         expect(mock.AuthenticationDetails).toHaveBeenCalledWith({Username: "user", Password: "pass"});
@@ -22,13 +22,12 @@ describe("test signInRequest", () => {
     });
 
     it ('signs the user successfully', () => {
-        const email = { email: "john@doe.com" };
         const mock = factory(callbacks => (
-            callbacks.onSuccess({ idToken: email })
+            callbacks.onSuccess(session)
         ));
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        expect(subject()({ username: "user", password: "pass"})).resolves.toEqual(email);
+        expect(subject()("user", "pass")).resolves.toHaveProperty('session', session);
         expectCallbacks(mock);
     });
 
@@ -38,7 +37,7 @@ describe("test signInRequest", () => {
         ));
         jest.doMock("amazon-cognito-identity-js", () => (mock));
 
-        expect(subject()({ username: "user", password: "pass"})).rejects.toEqual({ error: 'error' });
+        expect(subject()("user", "pass")).rejects.toEqual({ error: 'error' });
         expectCallbacks(mock);
     });
 });

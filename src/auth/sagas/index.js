@@ -1,29 +1,32 @@
-import { takeEvery, put, fork } from "redux-saga/effects";
+import {takeEvery, put } from "redux-saga/effects";
 import { SubmissionError } from "redux-form";
-import { formActionSaga } from "redux-form-saga";
-import { signIn, signUp, confirmation } from "../actions";
+
+import { routinePromiseWatcherSaga } from "redux-saga-routines";
+
+import { signInRoutine, signUpRoutine, confirmationRoutine, signOutRoutine } from "../actions";
 import { handleSignInSaga } from "./signIn";
 import { handleSignUpSaga } from "./signUp";
 import { handleConfirmationSaga } from "./confirmation";
+import { handleSignOutSaga } from "./signOut";
 
 function* signInWatcher() {
-    yield takeEvery(signIn.REQUEST, handleSignInSaga);
+    yield takeEvery(signInRoutine.TRIGGER, handleSignInSaga);
 }
 
 function* signUpWatcher() {
-    yield takeEvery(signUp.REQUEST, handleSignUpSaga);
+    yield takeEvery(signUpRoutine.TRIGGER, handleSignUpSaga);
 }
 
 function* confirmationWatcher() {
-    yield takeEvery(confirmation.REQUEST, handleConfirmationSaga);
+    yield takeEvery(confirmationRoutine.TRIGGER, handleConfirmationSaga);
 }
 
-const sagas = [signInWatcher, signUpWatcher, confirmationWatcher, formActionSaga];
+function* signOutWatcher() {
+    yield takeEvery(signOutRoutine.TRIGGER, handleSignOutSaga);
+}
 
 export const formError = (action, errors) => (
     put(action.failure(new SubmissionError(errors)))
 );
 
-export default function* () {
-    yield sagas.map(saga => fork(saga));
-};
+export default [routinePromiseWatcherSaga, signInWatcher, signUpWatcher, confirmationWatcher, signOutWatcher];

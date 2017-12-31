@@ -4,14 +4,14 @@ import { routerMiddleware } from "react-router-redux";
 import { persistStore } from "redux-persist"
 
 import rootReducer from "../reducers";
-import rootSaga from "../sagas";
+import rootSagas from "../sagas";
 
 export default history => {
     const sagaMiddleware = createSagaMiddleware();
     const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, routerMiddleware(history)));
     const persistor = persistStore(store);
 
-    sagaMiddleware.run(rootSaga);
+    rootSagas.forEach(sagaMiddleware.run);
 
     return { persistor, store };
 }

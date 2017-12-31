@@ -7,7 +7,7 @@ const LoginLink = ({ isLoggedIn, dispatch, ...props }) => (
 );
 
 const mapStateToProps = state => ({
-    isLoggedIn: state.auth.isLoggedIn,
+    isLoggedIn: state.auth.signIn.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(LoginLink);

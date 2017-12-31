@@ -7,8 +7,8 @@ const RegisterLink = ({ isLoggedIn, isRegistered, dispatch, ...props }) => (
 );
 
 const mapStateToProps = state => ({
-    isLoggedIn: state.auth.isLoggedIn,
-    isRegistered: state.auth.isLoggedIn
+    isLoggedIn: state.auth.signIn.isLoggedIn,
+    isRegistered: state.auth.signUp.isLoggedIn
 });
 
 export default connect(mapStateToProps)(RegisterLink);
